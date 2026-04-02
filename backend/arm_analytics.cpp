@@ -61,7 +61,7 @@ void ArmAnalytics::startVideo(QObject* object) {
     }
 
     if (detected_device == AM62PXX_EVM) {
-        gst_pipeline.replace("avdec_h264", "v4l2h264dec capture-io-mode=4");
+        gst_pipeline.replace("avdec_h264", "v4l2h264dec capture-io-mode=2");
         gst_pipeline.replace("loop=true", "loop=true caps=video/x-h264,width=1280,height=720,framerate=1/1");
     }
 

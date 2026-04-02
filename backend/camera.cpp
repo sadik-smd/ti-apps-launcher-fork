@@ -124,6 +124,7 @@ void Camera::update_codec(bool codec_choice) {
 }
 
 QString Camera::record_camera(QString camera) {
+    gst_pipeline = "";
     _camera = camera;
     QString time_format = "yyyy_MM_dd-HH_mm_ss";
     QDateTime time = QDateTime::currentDateTime();
@@ -159,6 +160,7 @@ QString Camera::record_camera(QString camera) {
 }
 
 QString Camera::play_camera(QString camera) {
+    gst_pipeline = "";
     _camera = camera;
     gst_pipeline.append("v4l2src device=");
     gst_pipeline.append(QString::fromStdString((cameraInfo[_camera.toStdString()]["device"])));
@@ -183,6 +185,7 @@ QString Camera::get_gst_pipeline() {
 }
 
 QString Camera::play_video(QString videofile) {
+    gst_pipeline = "";
     _videofile = videofile;
     filename = _videofile;
     emit filename_changed();
@@ -197,7 +200,7 @@ QString Camera::play_video(QString videofile) {
     gst_pipeline.append(codec);
     gst_pipeline.append("parse ! v4l2");
     gst_pipeline.append(codec);
-    gst_pipeline.append("dec capture-io-mode=dmabuf ! videoconvert ! glupload ! qml6glsink name=sink sync=true");
+    gst_pipeline.append("dec capture-io-mode=mmap ! videoconvert ! glupload ! qml6glsink name=sink");
     qDebug() << "New Gst Pipeline: " << gst_pipeline;
     return gst_pipeline;
 }
